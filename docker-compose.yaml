@@ -1,0 +1,32 @@
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.10-management
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+    - ./init/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    - ./init/definitions.json:/etc/rabbitmq/definitions.json:ro
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: testando12
+    networks:
+      - data_net
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
+    volumes:
+      - ./docker/pg-data:/var/lib/postgresql/data 
+    environment:
+      POSTGRES_PASSWORD: "Postgres2022!"
+      POSTGRES_DB: bank
+    networks:
+      - data_net
+    ports:
+      - "5432:5432"
+
+networks:
+  data_net:
+    driver: bridge
