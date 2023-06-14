@@ -12,7 +12,6 @@ def test_create_a_transaction(client):
         'Accept': mimetype
     }
     data = {
-        'account': '455465',
         'date': '12/06/2022',
         'value': 1000.00,
         'account': 1,
@@ -21,7 +20,6 @@ def test_create_a_transaction(client):
     assert response.status_code == 200
     assert response.data
     data = {
-        'account': '455465',
         'date': '12/06/2022',
         'value': 500.00,
         'account': 1,

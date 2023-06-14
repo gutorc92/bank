@@ -32,6 +32,11 @@ def create():
         data = request.get_json()
         agency = db.session.query(Agency).filter(Agency.id == data['agency']).one()
         person = db.session.query(Person).filter(Person.id == data['person']).one()
+        if not person:
+            return {"error": "Person does not exist"}
+        if not agency:
+            return {"error": "Agency does not exist"}
+        # account = db.session.query(Account).filter(Account.person_owner == person.id & Account.agency_owner).one()
         new_account = Account(
             bc_identify=data['bc_identify'],
             type=data['type'],
