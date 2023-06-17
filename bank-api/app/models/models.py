@@ -33,7 +33,7 @@ class Person(db.Model, BaseMixInModel):
 
 class Agency(db.Model, BaseMixInModel):
     id = db.Column(db.Integer, primary_key=True)
-    bc_identify = db.Column(db.String, nullable=False)
+    bc_identify = db.Column(db.String, nullable=False, unique=True)
     city = db.Column(db.String, nullable=False)
 
 
@@ -46,7 +46,7 @@ class Agency(db.Model, BaseMixInModel):
 
 class Account(db.Model, BaseMixInModel):
     id = db.Column(db.Integer, primary_key=True)
-    bc_identify = db.Column(db.String, nullable=False)
+    bc_identify = db.Column(db.String, nullable=False, unique=True)
     type = db.Column(Enum("current", "saving", name="account_type", create_type=True), nullable=False)
     person_owner = db.Column(db.Integer, db.ForeignKey('person.id'),
                           nullable=False)
@@ -59,6 +59,18 @@ class Account(db.Model, BaseMixInModel):
 
     def __repr__(self):
         return f"<Agency {self.bc_identify}>"
+
+class Balance(db.Model, BaseMixInModel):
+    id = db.Column(db.Integer, primary_key=True)
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
+                          nullable=False, unique=True)
+    value = db.Column(db.Float, nullable=False)
+
+    def __init__(self, value: float):
+        self.value = value
+
+    def __repr__(self):
+        return f"<Balance {self.value}>"
 
 class Transaction(db.Model, BaseMixInModel):
     id = db.Column(db.Integer, primary_key=True)

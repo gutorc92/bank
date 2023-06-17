@@ -3,7 +3,7 @@ from app.account import bp
 from flask import request
 # from app import db
 from app.extensions import db
-from app.models.models import Account, Person, Agency, Transaction
+from app.models.models import Account, Person, Agency, Balance
 
 @bp.route('/', methods=['GET'])
 def list():
@@ -13,18 +13,21 @@ def list():
 
 @bp.route('/<id>/balance', methods=['GET'])
 def balance(id):
-    if request.method == 'GET':
-      account = Account.query.filter_by(id = id).one()
-      transactions = Transaction.query.filter_by(account_id = account.id).all()  
-      new_account = account.json()
-      balance = 0
-      for transaction in transactions:
-          if transaction.type_of == 'credit':
-              balance += transaction.value
-          else:
-              balance -= transaction.value
-      new_account['balance'] = balance
-      return {"item": new_account}
+    account = Account.query.filter_by(id = id).one()
+    # transactions = Transaction.query.filter_by(account_id = account.id).all()
+    balance_value = 0
+    balance = Balance.query.filter_by(account_id = account.id).first()
+    if balance:
+        balance_value = balance.value
+    new_account = account.json()
+    # balance = 0
+    # for transaction in transactions:
+    #     if transaction.type_of == 'credit':
+    #         balance += transaction.value
+    #     else:
+    #         balance -= transaction.value
+    new_account['balance'] = balance_value
+    return {"item": new_account}
 
 @bp.route('/', methods=['POST'])
 def create():
