@@ -1,5 +1,6 @@
 import json
-from tests.unit.api.functional import client, PersonFactory, generate_dict_factory
+from tests.mocks import PersonFactory, generate_dict_factory
+from tests.unit.api.functional import client
 
 
 

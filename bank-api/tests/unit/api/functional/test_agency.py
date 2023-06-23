@@ -1,5 +1,6 @@
 import json
-from tests.unit.api.functional import client, AgencyFactory, generate_dict_factory
+from tests.mocks import AgencyFactory, generate_dict_factory
+from tests.unit.api.functional import client
 
 def test_agency(client):
     response = client.get('/api/agency/')
